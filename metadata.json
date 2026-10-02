@@ -1,0 +1,6 @@
+{
+  "name": "Plateforme Cabinet de Kinésithérapie — Pré-évaluation & Rendez-vous",
+  "description": "Plateforme web professionnelle pour cabinet de kinésithérapie : pré-évaluation d'orientation en ligne, prise de rendez-vous en temps réel, suivi du parcours patient et tableau de bord praticien.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
