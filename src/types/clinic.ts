@@ -164,6 +164,15 @@ export interface ClinicSettings {
   };
 }
 
+export interface AuthUser {
+  id?: string;
+  name: string;
+  email: string;
+  role: string;
+  provider: 'google' | 'apple' | 'email';
+  avatarUrl?: string;
+}
+
 export interface ClinicDatabase {
   settings: ClinicSettings;
   services: ClinicService[];

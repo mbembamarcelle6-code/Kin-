@@ -35,34 +35,34 @@ export function getNextWorkingDayIso(minOffsetDays = 1): string {
 export const INITIAL_CLINIC_DB: ClinicDatabase = {
   settings: {
     cabinetName: 'Kiné Plus',
-    tagline: 'Cabinet de Kinésithérapie & Rééducation fonctionnelle',
+    tagline: 'Votre santé, votre mobilité, notre priorité.',
     shortPresentation:
-      'Bienvenue au cabinet Kiné Plus. Sous la direction de notre cheffe de cabinet et de son équipe, nous vous accueillons pour un bilan complet, un accompagnement personnalisé et des soins de haute qualité adaptés à vos besoins.',
-    address: '12 Avenue des Praticiens',
-    cityPostal: '75011 Paris',
+      'Cabinet de kinésithérapie dirigé par Chef Marcelle Mbemba. Écoute, Soin, Rééducation, Récupération : nous vous accompagnons vers une meilleure mobilité au quotidien. Profitez actuellement de notre séance en promotion à 5 500 FCFA.',
+    address: 'Cabinet de Kinésithérapie Kiné Plus',
+    cityPostal: 'Brazzaville / Pointe-Noire',
     accessNotes:
-      'Cabinet situé en rez-de-chaussée accessible PMR. Métro à 2 minutes à pied. Stationnement disponible à proximité.',
-    phoneDisplay: '06 85 63 21 70',
-    phoneDial: '0685632170',
-    whatsappNumber: '06 85 63 21 70',
-    emailContact: 'moussietoudorlon@gmail.com',
-    openingHoursSummary: 'Lundi – Vendredi : 08h30 – 19h30 · Samedi : 09h00 – 13h00',
+      'Cabinet accessible en rez-de-chaussée pour personnes à mobilité réduite. Accès facile en taxi et transport.',
+    phoneDisplay: '06 85 63 21 7',
+    phoneDial: '068563217',
+    whatsappNumber: '06 85 63 21 7',
+    emailContact: 'mbembamarcelle6@gmail.com',
+    openingHoursSummary: 'Lundi – Vendredi : 08h00 – 19h00 · Samedi : 08h30 – 13h30',
     practitioners: [
       {
-        id: 'prac-dorlon-cheffe',
-        name: 'Mme. Dorlon',
-        role: 'Cheffe du cabinet Kiné Plus & Masseur-Kinésithérapeute D.E.',
-        rpps: 'N° RPPS : 10104829103 / Ordre des Masseurs-Kinésithérapeutes',
-        bio: 'Fondatrice et directrice du cabinet Kiné Plus. Spécialisée en rééducation fonctionnelle, prise en charge du rachis, réhabilitation post-traumatique et accompagnement individualisé des sportifs et patients de tout âge.',
-        photoUrl: '/src/assets/images/cheffe_kine_plus_1790937963788.jpg',
+        id: 'prac-marcelle-mbemba',
+        name: 'Chef Marcelle Mbemba',
+        role: 'Cheffe du cabinet Kiné Plus & Masseur-Kinésithérapeute',
+        rpps: 'Kinésithérapeute Certifiée · Directrice du cabinet Kiné Plus',
+        bio: 'Fondatrice et cheffe du cabinet Kiné Plus. Passionnée par la rééducation fonctionnelle, le soulagement durable des douleurs et l’accompagnement personnalisé des patients pour bouger mieux et vivre mieux.',
+        photoUrl: '/src/assets/images/marcelle_mbemba_cheffe_1790939960046.jpg',
         isHead: true,
       },
       {
-        id: 'prac-equipe-collaborateur',
-        name: 'Équipe Kiné Plus',
-        role: 'Masseurs-Kinésithérapeutes Diplômés d’État',
-        rpps: 'Inscrits au Conseil National de l’Ordre',
-        bio: 'Équipe dédiée aux soins personnalisés, à la thérapie manuelle, au drainage et au renforcement proprioceptif au sein du plateau technique Kiné Plus.',
+        id: 'prac-equipe-kine',
+        name: 'Équipe Soins Kiné Plus',
+        role: 'Masseurs-Kinésithérapeutes Qualifiés',
+        rpps: 'Praticiens Kiné Plus',
+        bio: 'Équipe dévouée aux soins manuels, à la réhabilitation posturale et au renforcement de la mobilité.',
         isHead: false,
       },
     ],
@@ -81,64 +81,76 @@ export const INITIAL_CLINIC_DB: ClinicDatabase = {
   },
   services: [
     {
-      id: 'srv-bilan-initial',
+      id: 'srv-kine-promo',
       code: '01',
-      name: 'Première séance & Bilan diagnostic kinésithérapique',
+      name: 'Séance de Kinésithérapie Complète (Offre Promotionnelle)',
       description:
-        'Consultation initiale approfondie menée avec notre équipe pour évaluer votre posture, amplitude articulaire, mobilité et définir le plan de soins adapté.',
+        'Bilan, soulagement des douleurs et rééducation personnalisée par Chef Marcelle Mbemba et son équipe. Tarif promotionnel exceptionnel.',
       durationLabel: '45 min',
       durationMinutes: 45,
-      price: 'Conventionné Sécurité Sociale & Mutuelles',
+      price: '5 500 FCFA (Promotion)',
       active: true,
-      tags: ['Première consultation', 'Bilan complet', 'Orientation'],
+      tags: ['Promotion', 'Bilan', 'Soin complet'],
     },
     {
-      id: 'srv-reeducation-rachis',
+      id: 'srv-dos-lombaires',
       code: '02',
-      name: 'Rééducation Dos, Cou & Posture',
+      name: 'Rééducation Dos & Lombaires',
       description:
-        'Prise en charge ciblée des cervicalgies, dorsalgies, lombalgies, sciatiques et déséquilibres posturaux avec exercices guidés.',
-      durationLabel: '30 min',
-      durationMinutes: 30,
-      price: 'Conventionné',
+        'Prise en charge ciblée des personnes souffrant de douleurs du dos, lombalgies aiguës ou chroniques, sciatiques et raideurs musculaires.',
+      durationLabel: '30 à 45 min',
+      durationMinutes: 45,
+      price: '5 500 FCFA',
       active: true,
-      tags: ['Dos', 'Cou', 'Lombaires'],
+      tags: ['Dos', 'Lombaires', 'Rachis'],
     },
     {
-      id: 'srv-membres-articulations',
+      id: 'srv-cervicales-tensions',
       code: '03',
-      name: 'Rééducation Articulaire & Membres',
+      name: 'Douleurs Cervicales & Tensions Musculaires',
       description:
-        'Soin des articulations périphériques : épaule (tendinopathies, coiffe des rotateurs), genou (ligaments, ménisques), hanche, cheville et pied.',
+        'Soulagement des torticolis, névralgies cervico-brachiales, contractures trapèzes et tensions de la nuque.',
       durationLabel: '30 min',
       durationMinutes: 30,
-      price: 'Conventionné',
+      price: '5 500 FCFA',
       active: true,
-      tags: ['Épaule', 'Genou', 'Hanche', 'Cheville'],
+      tags: ['Cou', 'Cervicales', 'Tensions'],
     },
     {
-      id: 'srv-post-blessure-operation',
+      id: 'srv-douleurs-articulaires',
       code: '04',
-      name: 'Suivi Post-Opératoire & Récupération Traumatique',
+      name: 'Douleurs Articulaires (Épaule, Genou, Hanche, Cheville)',
       description:
-        'Rééducation post-chirurgie (prothèse de hanche/genou, chirurgie d’épaule) et suite d’entorses ou fractures selon le protocole de votre chirurgien.',
-      durationLabel: '45 min',
+        'Prise en charge des raideurs et gênes articulaires, tendinopathies, arthrose et réhabilitation de la mobilité.',
+      durationLabel: '30 à 45 min',
       durationMinutes: 45,
-      price: 'Conventionné',
+      price: '5 500 FCFA',
       active: true,
-      tags: ['Post-opératoire', 'Traumatologie'],
+      tags: ['Articulations', 'Épaule', 'Genou', 'Hanche', 'Cheville'],
     },
     {
-      id: 'srv-sport-reprise',
+      id: 'srv-post-blessure-trauma',
       code: '05',
-      name: 'Kinésithérapie du Sport & Reprise d’Activité',
+      name: 'Rééducation après Blessure, Traumatisme ou Opération',
       description:
-        'Accompagnement dynamique sur notre plateau technique pour restaurer la puissance musculaire, l’endurance et la proprioception en vue de la reprise sportive.',
+        'Accompagnement post-traumatique (entorses, fractures) et post-chirurgie pour restaurer progressivement la mobilité et la force.',
       durationLabel: '45 min',
       durationMinutes: 45,
-      price: 'Conventionné',
+      price: '5 500 FCFA',
       active: true,
-      tags: ['Sport', 'Proprioception', 'Renforcement'],
+      tags: ['Blessure', 'Chirurgie', 'Traumatisme'],
+    },
+    {
+      id: 'srv-sport-mobilite',
+      code: '06',
+      name: 'Sportifs & Récupération de l’Autonomie',
+      description:
+        'Programme dynamique pour sportifs après blessure et personnes souhaitant retrouver souplesse, mobilité et liberté de mouvement.',
+      durationLabel: '45 min',
+      durationMinutes: 45,
+      price: '5 500 FCFA',
+      active: true,
+      tags: ['Sportifs', 'Mobilité', 'Autonomie'],
     },
   ],
   weeklySchedule: [
@@ -219,8 +231,8 @@ export const INITIAL_CLINIC_DB: ClinicDatabase = {
     {
       id: 'apt-demo-1',
       reference: 'RDV-2026-1082',
-      serviceId: 'srv-bilan-initial',
-      serviceName: 'Première séance & Bilan diagnostic kinésithérapique',
+      serviceId: 'srv-kine-promo',
+      serviceName: 'Séance de Kinésithérapie Complète (Offre Promotionnelle)',
       date: getNextWorkingDayIso(1),
       time: '09:30',
       lastName: 'Dupont',
@@ -228,7 +240,7 @@ export const INITIAL_CLINIC_DB: ClinicDatabase = {
       phone: '06 12 34 56 78',
       email: 'c.dupont@exemple.fr',
       motif: 'Bilan initial - Gêne cervicale et épaule droite',
-      optionalMessage: 'Ordonnance médicale prescrite par le Dr. Martin',
+      optionalMessage: 'Ordonnance médicale prescrite',
       status: 'confirmed',
       notificationPrefs: {
         emailConfirmation: true,
@@ -245,8 +257,8 @@ export const INITIAL_CLINIC_DB: ClinicDatabase = {
     {
       id: 'apt-demo-2',
       reference: 'RDV-2026-1083',
-      serviceId: 'srv-reeducation-rachis',
-      serviceName: 'Rééducation Dos, Cou & Posture',
+      serviceId: 'srv-dos-lombaires',
+      serviceName: 'Rééducation Dos & Lombaires',
       date: getNextWorkingDayIso(2),
       time: '14:30',
       lastName: 'Moreau',
@@ -274,18 +286,18 @@ export const INITIAL_CLINIC_DB: ClinicDatabase = {
     {
       id: 'testi-1',
       patientInitialsOrName: 'Claire V.',
-      consultationContext: 'Rééducation post-opératoire de l’épaule',
+      consultationContext: 'Rééducation de l’épaule',
       comment:
-        'Un immense merci à la cheffe du cabinet Kiné Plus pour son écoute, sa patience et son professionnalisme. En 8 semaines, j’ai retrouvé une mobilité que je pensais perdue.',
+        'Un immense merci à Chef Marcelle Mbemba pour son écoute, sa patience et son professionnalisme. En quelques séances, j’ai retrouvé ma mobilité et mon autonomie.',
       dateLabel: 'Septembre 2026',
       verifiedByClinic: true,
     },
     {
       id: 'testi-2',
       patientInitialsOrName: 'Julien B.',
-      consultationContext: 'Suivi sportif & Rééducation cheville',
+      consultationContext: 'Suivi sportif & Rééducation lombaire',
       comment:
-        'Le plateau technique de Kiné Plus est remarquable. Des exercices très précis, un accueil toujours souriant et une prise de rendez-vous en ligne ultra simple.',
+        'Le cabinet Kiné Plus est remarquable. Des exercices très précis, un accueil chaleureux et une prise de rendez-vous en ligne ultra simple.',
       dateLabel: 'Août 2026',
       verifiedByClinic: true,
     },
@@ -307,7 +319,7 @@ export function suggestServiceFromPreEvaluation(
     mainIssue === 'Récupération après une blessure' ||
     mainGoal === 'Récupérer après une blessure'
   ) {
-    const found = activeServices.find((s) => s.id === 'srv-post-blessure-operation');
+    const found = activeServices.find((s) => s.id === 'srv-post-blessure-trauma');
     if (found) return { serviceId: found.id, serviceName: found.name };
   }
 
@@ -315,12 +327,17 @@ export function suggestServiceFromPreEvaluation(
     mainIssue === 'Prévention' ||
     mainGoal === 'Reprendre une activité physique'
   ) {
-    const found = activeServices.find((s) => s.id === 'srv-sport-reprise');
+    const found = activeServices.find((s) => s.id === 'srv-sport-mobilite');
     if (found) return { serviceId: found.id, serviceName: found.name };
   }
 
-  if (bodyArea === 'Dos' || bodyArea === 'Cou') {
-    const found = activeServices.find((s) => s.id === 'srv-reeducation-rachis');
+  if (bodyArea === 'Dos') {
+    const found = activeServices.find((s) => s.id === 'srv-dos-lombaires');
+    if (found) return { serviceId: found.id, serviceName: found.name };
+  }
+
+  if (bodyArea === 'Cou') {
+    const found = activeServices.find((s) => s.id === 'srv-cervicales-tensions');
     if (found) return { serviceId: found.id, serviceName: found.name };
   }
 
@@ -331,13 +348,13 @@ export function suggestServiceFromPreEvaluation(
     bodyArea === 'Cheville/pied' ||
     bodyArea === 'Bras/main'
   ) {
-    const found = activeServices.find((s) => s.id === 'srv-membres-articulations');
+    const found = activeServices.find((s) => s.id === 'srv-douleurs-articulaires');
     if (found) return { serviceId: found.id, serviceName: found.name };
   }
 
   return {
-    serviceId: fallback ? fallback.id : 'srv-bilan-initial',
-    serviceName: fallback ? fallback.name : 'Première séance & Bilan kinésithérapique',
+    serviceId: fallback ? fallback.id : 'srv-kine-promo',
+    serviceName: fallback ? fallback.name : 'Séance de Kinésithérapie Complète',
   };
 }
 

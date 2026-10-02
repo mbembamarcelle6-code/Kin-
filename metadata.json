@@ -1,6 +1,6 @@
 {
-  "name": "Plateforme Cabinet de Kinésithérapie — Pré-évaluation & Rendez-vous",
-  "description": "Plateforme web professionnelle pour cabinet de kinésithérapie : pré-évaluation d'orientation en ligne, prise de rendez-vous en temps réel, suivi du parcours patient et tableau de bord praticien.",
+  "name": "Kiné Plus — Cabinet de Kinésithérapie Chef Marcelle Mbemba",
+  "description": "Plateforme officielle du cabinet de kinésithérapie Kiné Plus dirigé par Chef Marcelle Mbemba. Votre santé, votre mobilité, notre priorité.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

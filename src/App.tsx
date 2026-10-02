@@ -6,7 +6,9 @@ import {
   ChevronDown,
   ClipboardList,
   Clock,
+  HeartPulse,
   Lock,
+  LogOut,
   Mail,
   MapPin,
   MessageCircle,
@@ -14,11 +16,13 @@ import {
   Phone,
   Send,
   ShieldCheck,
+  Sparkles,
   Sun,
   UserCheck,
 } from 'lucide-react';
 import {
   Appointment,
+  AuthUser,
   ClinicDatabase,
   ContactRequest,
   PreEvaluationResult,
@@ -28,17 +32,53 @@ import { PreEvaluationSection } from './components/PreEvaluationSection';
 import { BookingSection } from './components/BookingSection';
 import { AdminDashboard } from './components/AdminDashboard';
 import { LegalPrivacyModal } from './components/LegalPrivacyModal';
+import { MultiAuthModal } from './components/MultiAuthModal';
 
-const CHEFFE_PHOTO_PATH = '/src/assets/images/cheffe_kine_plus_1790937963788.jpg';
+const CHEFFE_PHOTO_PATH = '/src/assets/images/marcelle_mbemba_cheffe_1790939960046.jpg';
 const HERO_IMAGE_PATH = '/src/assets/images/hero_kine_plus_1790937974496.jpg';
 const GYM_IMAGE_PATH = '/src/assets/images/gym_kine_plus_1790937985013.jpg';
 const SOIN_IMAGE_PATH = '/src/assets/images/soin_kine_plus_1790937995483.jpg';
 
+const TARGET_AUDIENCES = [
+  {
+    title: 'Douleurs du dos & lombaires',
+    desc: 'Lombalgies, sciatiques, hernies, blocages et tensions du bas du dos.',
+  },
+  {
+    title: 'Douleurs cervicales & tensions',
+    desc: 'Torticolis, contractures trapèzes, céphalées de tension et raideurs de la nuque.',
+  },
+  {
+    title: 'Douleurs articulaires',
+    desc: 'Épaules, genoux, hanches, chevilles, coudes et poignets (arthrose, tendinites).',
+  },
+  {
+    title: 'Rééducation après blessure ou trauma',
+    desc: 'Entorses, déchirures musculaires, luxations et chocs traumatiques récents.',
+  },
+  {
+    title: 'Rééducation après chirurgie',
+    desc: 'Suivi post-opératoire (prothèses, ligaments croisés, sutures tendineuses).',
+  },
+  {
+    title: 'Difficultés de mobilité & mouvement',
+    desc: 'Perte d’amplitude, raideur matinale, difficulté à la marche ou aux gestes quotidiens.',
+  },
+  {
+    title: 'Sportifs & récupération',
+    desc: 'Optimisation de la récupération, prévention des blessures et reprise sécurisée.',
+  },
+  {
+    title: 'Souplesse & autonomie',
+    desc: 'Retrouver progressivement équilibre, confiance et aisance corporelle.',
+  },
+];
+
 const GALLERY_IMAGES = [
   {
     src: CHEFFE_PHOTO_PATH,
-    title: 'Mme. Dorlon — Cheffe du cabinet Kiné Plus',
-    caption: 'Masseur-Kinésithérapeute Diplômée d’État et directrice des soins du cabinet Kiné Plus.',
+    title: 'Chef Marcelle Mbemba',
+    caption: 'Kinésithérapeute & Directrice du cabinet Kiné Plus. Écoute, Soin, Rééducation, Récupération.',
   },
   {
     src: GYM_IMAGE_PATH,
@@ -63,53 +103,53 @@ const PATIENT_JOURNEY_STEPS = [
     num: '02',
     title: 'Vous êtes accueilli chez Kiné Plus',
     description:
-      'Notre équipe vous reçoit à l’heure prévue dans un environnement moderne, lumineux et serein.',
+      'Chef Marcelle Mbemba et son équipe vous reçoivent dans un cadre chaleureux et moderne.',
   },
   {
     num: '03',
-    title: 'Évaluation par la cheffe ou son équipe',
+    title: 'Bilan complet par Chef Marcelle Mbemba',
     description:
-      'Un bilan fonctionnel minutieux est réalisé pour comprendre votre motif de consultation et vos objectifs.',
+      'Un examen attentif de votre posture, souplesse et douleur pour cibler la source du problème.',
   },
   {
     num: '04',
     title: 'Programme de soins sur-mesure',
     description:
-      'Un plan de rééducation progressif est établi combinant thérapie manuelle et exercices guidés.',
+      'Thérapie manuelle, mobilisations douces et exercices personnalisés pour soulager rapidement.',
   },
   {
     num: '05',
-    title: 'Votre mobilité est suivie',
+    title: 'Bougez mieux, vivez mieux !',
     description:
-      'Chaque séance consolide vos progrès jusqu’au rétablissement complet de votre autonomie.',
+      'Suivi régulier jusqu’à la restauration complète de votre confort et de votre autonomie.',
   },
 ];
 
 const FAQ_ITEMS = [
   {
-    question: 'Qui assure les soins au cabinet Kiné Plus ?',
+    question: 'Qui est Chef Marcelle Mbemba ?',
     answer:
-      'Les séances sont dirigées par Mme. Dorlon, cheffe du cabinet, ainsi que par son équipe de masseurs-kinésithérapeutes diplômés d’État. Chaque patient bénéficie d’un suivi rigoureux et personnalisé.',
+      'Chef Marcelle Mbemba est la cheffe et directrice du cabinet Kiné Plus. Masseur-Kinésithérapeute expérimentée, elle supervise l’ensemble des bilans et des protocoles de rééducation avec une exigence de soin et d’écoute personnalisée.',
   },
   {
-    question: 'Comment contacter directement le cabinet ou la cheffe ?',
+    question: 'En quoi consiste la promotion à 5 500 FCFA ?',
     answer:
-      'Vous pouvez joindre le cabinet par téléphone au 06 85 63 21 70, par WhatsApp en un clic, ou par e-mail à moussietoudorlon@gmail.com.',
+      'Actuellement, le cabinet Kiné Plus propose la séance complète de kinésithérapie au tarif promotionnel exceptionnel de 5 500 FCFA pour permettre à chacun de bénéficier d’un soin de qualité.',
   },
   {
-    question: 'Le questionnaire de pré-évaluation remplace-t-il une ordonnance ?',
+    question: 'Quelles sont les méthodes de connexion disponibles ?',
     answer:
-      'Non. Ce questionnaire vous guide vers la séance adéquate pour réserver votre créneau. Pensez à apporter votre ordonnance médicale le jour de votre première consultation.',
+      'Vous pouvez vous connecter facilement en 1 clic avec votre compte Google, avec votre compte Apple ID, ou par E-mail.',
   },
   {
-    question: 'Quels documents apporter lors du premier rendez-vous ?',
+    question: 'Comment contacter directement Chef Marcelle Mbemba ?',
     answer:
-      'Votre ordonnance médicale, votre carte Vitale, votre attestation de mutuelle et vos éventuels examens d’imagerie (radios, IRM, scanners). Prévoyez une tenue confortable.',
+      'Vous pouvez joindre directement le cabinet au 06 85 63 21 7, par WhatsApp ou par e-mail à mbembamarcelle6@gmail.com.',
   },
   {
-    question: 'Quels sont les tarifs et remboursements ?',
+    question: 'Faut-il une ordonnance médicale pour la séance ?',
     answer:
-      'Les soins prescrits sont conventionnés par la Sécurité Sociale et pris en charge selon les barèmes en vigueur avec votre mutuelle santé.',
+      'Si vous possédez une ordonnance de votre médecin traitant ou chirurgien, apportez-la lors de votre premier rendez-vous pour une prise en charge optimale.',
   },
 ];
 
@@ -138,6 +178,35 @@ export function App() {
   } | null>(null);
 
   const [isLegalModalOpen, setIsLegalModalOpen] = useState<boolean>(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authDefaultRole, setAuthDefaultRole] = useState<'admin' | 'patient'>('admin');
+  const [loggedInUser, setLoggedInUser] = useState<AuthUser | null>(() => {
+    try {
+      const saved = localStorage.getItem('kine_auth_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem('kine_auth_user');
+    sessionStorage.removeItem('kine_admin_token');
+    setLoggedInUser(null);
+    setIsAdminView(false);
+  };
+
+  const handleAuthSuccess = (user: AuthUser) => {
+    setLoggedInUser(user);
+    if (
+      user.role.includes('Cheffe') ||
+      user.email.toLowerCase().includes('mbemba') ||
+      user.email.toLowerCase().includes('admin') ||
+      user.email.toLowerCase() === 'moussietoudorlon@gmail.com'
+    ) {
+      setIsAdminView(true);
+    }
+  };
 
   useEffect(() => {
     fetch('/api/public/clinic')
@@ -150,10 +219,10 @@ export function App() {
               ...prev.settings,
               ...data.settings,
               cabinetName: 'Kiné Plus',
-              phoneDisplay: '06 85 63 21 70',
-              phoneDial: '0685632170',
-              whatsappNumber: '06 85 63 21 70',
-              emailContact: 'moussietoudorlon@gmail.com',
+              phoneDisplay: '06 85 63 21 7',
+              phoneDial: '068563217',
+              whatsappNumber: '06 85 63 21 7',
+              emailContact: 'mbembamarcelle6@gmail.com',
             },
             services: data.services,
             weeklySchedule: data.weeklySchedule || prev.weeklySchedule,
@@ -243,7 +312,7 @@ export function App() {
     setContactMessage('');
     setContactFeedback({
       type: 'success',
-      text: 'Votre message a bien été envoyé à la cheffe du cabinet Kiné Plus. Nous vous répondrons rapidement.',
+      text: 'Votre message a bien été transmis à Chef Marcelle Mbemba.',
     });
   };
 
@@ -262,31 +331,50 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 text-slate-900 dark:text-slate-100 pb-16 md:pb-0">
       {/* ==================================================================== */}
+      {/* PROMOTIONAL TOP TICKER                                               */}
+      {/* ==================================================================== */}
+      <div className="bg-gradient-to-r from-emerald-600 via-teal-700 to-teal-800 text-white text-xs py-2 px-4 text-center font-medium flex items-center justify-center gap-2 shadow-xs">
+        <Sparkles className="w-3.5 h-3.5 shrink-0" />
+        <span>
+          <strong>PROMOTION EXCEPTIONNELLE :</strong> Séance de kinésithérapie complète à seulement{' '}
+          <span className="font-bold underline">5 500 FCFA</span> avec Chef Marcelle Mbemba !
+        </span>
+        <button
+          type="button"
+          onClick={() => scrollToSection('reservation')}
+          className="ml-2 bg-white text-teal-800 font-bold px-2.5 py-0.5 rounded-full text-[11px] hover:bg-teal-50 cursor-pointer"
+        >
+          Profiter de l’offre
+        </button>
+      </div>
+
+      {/* ==================================================================== */}
       {/* TOP NAVIGATION BAR                                                   */}
       {/* ==================================================================== */}
       <header className="sticky top-0 z-40 h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <a
           href="#accueil"
-          className="text-lg sm:text-xl font-bold tracking-tight text-teal-800 dark:text-teal-400"
+          className="text-lg sm:text-xl font-bold tracking-tight text-teal-800 dark:text-teal-400 flex items-center gap-2"
         >
-          Kiné Plus
+          <HeartPulse className="w-5 h-5 text-teal-700" />
+          <span>Kiné Plus</span>
         </a>
 
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
           <a href="#pre-evaluation" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
             Pré-évaluation
           </a>
-          <a href="#prestations" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
-            Prestations
-          </a>
           <a href="#cheffe" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
-            La Cheffe du Cabinet
+            Chef Marcelle Mbemba
           </a>
-          <a href="#parcours" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
-            Votre parcours
+          <a href="#prestations" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
+            Prestations (5 500 FCFA)
+          </a>
+          <a href="#pour-qui" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
+            Pour qui ?
           </a>
           <a href="#contact" className="hover:text-teal-700 dark:hover:text-teal-400 transition-colors">
-            Accès & Contact
+            Contact
           </a>
         </nav>
 
@@ -300,14 +388,57 @@ export function App() {
             {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
-          <button
-            type="button"
-            onClick={() => setIsAdminView(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 cursor-pointer whitespace-nowrap"
-          >
-            <Lock className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
-            <span>Espace Praticien</span>
-          </button>
+          {/* Multi-provider Auth Trigger (Google, Apple, Email) */}
+          {loggedInUser ? (
+            <div className="flex items-center gap-2">
+              {loggedInUser.role.includes('Cheffe') ||
+              loggedInUser.email.toLowerCase().includes('mbemba') ||
+              loggedInUser.email.toLowerCase() === 'moussietoudorlon@gmail.com' ? (
+                <button
+                  type="button"
+                  onClick={() => setIsAdminView(true)}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-teal-50 dark:bg-teal-950 border border-teal-300 dark:border-teal-700 text-xs font-semibold text-teal-800 dark:text-teal-300 hover:bg-teal-100 cursor-pointer shadow-2xs"
+                  title="Accéder au tableau de bord de gestion"
+                >
+                  <img
+                    src={CHEFFE_PHOTO_PATH}
+                    alt="Chef Marcelle Mbemba"
+                    className="w-5 h-5 rounded-full object-cover border border-teal-600"
+                  />
+                  <span>Espace Chef Marcelle Mbemba</span>
+                </button>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200">
+                  <UserCheck className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+                  <span className="font-medium truncate max-w-[130px]">
+                    {loggedInUser.name}
+                  </span>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-rose-600 hover:border-rose-300 cursor-pointer"
+                title="Se déconnecter"
+                aria-label="Se déconnecter"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setAuthDefaultRole('admin');
+                setIsAuthModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer whitespace-nowrap shadow-2xs transition-colors"
+            >
+              <Lock className="w-3.5 h-3.5 text-teal-700 dark:text-teal-400" />
+              <span>Connexion (Google · Apple · E-mail)</span>
+            </button>
+          )}
 
           <button
             type="button"
@@ -325,28 +456,59 @@ export function App() {
       {/* ==================================================================== */}
       <section
         id="accueil"
-        className="pt-10 pb-16 md:pt-16 md:pb-24 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
+        className="pt-8 pb-16 md:pt-14 md:pb-20 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
       >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="text-xs font-bold text-teal-700 dark:text-teal-400 tracking-wide uppercase">
-                Cabinet Kiné Plus · Dirigé par Mme. Dorlon
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-950 border border-teal-200 dark:border-teal-800 text-teal-800 dark:text-teal-300 text-xs font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Cabinet Kiné Plus · Dirigé par Chef Marcelle Mbemba</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 dark:text-white leading-[1.18]">
-                Votre santé, votre mobilité : l’excellence en kinésithérapie
+              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+                Votre santé, votre mobilité, notre priorité.
               </h1>
 
+              <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-teal-700 dark:text-teal-400">
+                <span>Écoute</span>
+                <span>•</span>
+                <span>Soin</span>
+                <span>•</span>
+                <span>Rééducation</span>
+                <span>•</span>
+                <span>Récupération</span>
+              </div>
+
               <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Bienvenue au cabinet <strong>Kiné Plus</strong>. Sous la conduite de notre cheffe de
-                cabinet et de ses praticiens qualifiés, retrouvez votre confort physique grâce à un
-                diagnostic personnalisé, des soins manuels experts et une rééducation de pointe.
+                Sous la direction attentionnée de <strong>Chef Marcelle Mbemba</strong>, le cabinet{' '}
+                <strong>Kiné Plus</strong> vous accueille pour soulager vos douleurs articulaires et
+                musculaires, restaurer votre mobilité et améliorer votre qualité de vie.
               </p>
 
+              {/* Promo Callout Card */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/15 to-teal-500/5 border border-emerald-500/30 flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-xs uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider">
+                    Tarif Spécial Promotionnel
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                    5 500 FCFA{' '}
+                    <span className="text-xs font-normal text-slate-500">/ la séance de kinésithérapie</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection('reservation')}
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs cursor-pointer whitespace-nowrap"
+                >
+                  Réserver à 5 500 FCFA
+                </button>
+              </div>
+
               {/* Direct CTAs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
                 <button
                   type="button"
                   onClick={() => scrollToSection('reservation')}
@@ -367,95 +529,94 @@ export function App() {
               </div>
 
               {/* Direct Contacts */}
-              <div className="pt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+              <div className="pt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
                 <a
-                  href="tel:0685632170"
-                  className="inline-flex items-center gap-1.5 text-teal-800 dark:text-teal-300 hover:underline"
+                  href="tel:068563217"
+                  className="inline-flex items-center gap-1.5 text-teal-800 dark:text-teal-300 hover:underline font-bold"
                 >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>Appeler le 06 85 63 21 70</span>
+                  <Phone className="w-4 h-4 text-emerald-600" />
+                  <span>RDV par téléphone : 06 85 63 21 7</span>
                 </a>
                 <span aria-hidden="true">·</span>
                 <a
-                  href="https://wa.me/33685632170"
+                  href="https://wa.me/242068563217"
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 hover:underline"
                 >
-                  <MessageCircle className="w-3.5 h-3.5" />
+                  <MessageCircle className="w-4 h-4" />
                   <span>WhatsApp direct</span>
                 </a>
                 <span aria-hidden="true">·</span>
                 <a
-                  href="mailto:moussietoudorlon@gmail.com"
+                  href="mailto:mbembamarcelle6@gmail.com"
                   className="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-400 hover:underline"
                 >
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>moussietoudorlon@gmail.com</span>
+                  <Mail className="w-4 h-4" />
+                  <span>mbembamarcelle6@gmail.com</span>
                 </a>
               </div>
             </div>
 
-            {/* Right: Hero Image */}
-            <div className="lg:col-span-6">
-              <div className="relative aspect-video rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md">
+            {/* Right: Portrait of Chef Marcelle Mbemba */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-full max-w-[360px] aspect-square rounded-3xl overflow-hidden border-2 border-teal-600/30 shadow-xl">
                 <img
-                  src={HERO_IMAGE_PATH}
-                  alt="Séance de kinésithérapie au cabinet Kiné Plus"
+                  src={CHEFFE_PHOTO_PATH}
+                  alt="Chef Marcelle Mbemba - Kiné Plus"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent p-5 text-white">
-                  <div className="text-xs font-semibold text-teal-300 uppercase tracking-wider">
-                    Kiné Plus · Paris
-                  </div>
-                  <div className="text-sm font-semibold mt-0.5">
-                    Séances attentives et plateau de rééducation de haute technicité
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent p-5 text-white">
+                  <div className="font-bold text-base">Chef Marcelle Mbemba</div>
+                  <div className="text-xs text-teal-300">Kinésithérapeute · Directrice Kiné Plus</div>
+                  <div className="text-[11px] text-slate-300 mt-0.5">
+                    « Bougez mieux, vivez mieux ! »
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 4 Pillars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-8 border-t border-slate-200 dark:border-slate-800">
-            <div className="space-y-1.5">
-              <div className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400">01</div>
-              <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                Prise de rendez-vous rapide
-              </h2>
+          {/* 4 Pillars from flyer */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-8 border-t border-slate-200 dark:border-slate-800">
+            <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold mb-2">
+                1
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Soulage la douleur</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Planning en temps réel pour choisir instantanément l’horaire qui vous convient le mieux.
+                Action ciblée sur les contractures, inflammations et blocages.
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400">02</div>
-              <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                Suivi personnalisé
-              </h2>
+            <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold mb-2">
+                2
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Restaure la mobilité</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Prise en charge individualisée avec bilan fonctionnel complet et exercices adaptés.
+                Récupération progressive de l’amplitude articulaire et de la souplesse.
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400">03</div>
-              <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                Professionnels qualifiés
-              </h2>
+            <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold mb-2">
+                3
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Améliore la qualité de vie</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Dirigé par Mme. Dorlon, praticienne diplômée d’État inscrite à l’Ordre National.
+                Retrouvez l’aisance dans votre travail, vos loisirs et votre quotidien.
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <div className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400">04</div>
-              <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                Cabinet accessible
-              </h2>
+            <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950 flex items-center justify-center text-teal-700 dark:text-teal-300 font-bold mb-2">
+                4
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Accompagnement personnalisé</h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
-                Situé à proximité immédiate des transports, en rez-de-chaussée accessible PMR.
+                Programme spécifique adapté à vos antécédents et à vos objectifs.
               </p>
             </div>
           </div>
@@ -471,93 +632,50 @@ export function App() {
       />
 
       {/* ==================================================================== */}
-      {/* FOCUS SUR LA CHEFFE DU CABINET                                       */}
+      {/* SECTION « POUR QUI ? » (EXTRAITE DU FLYER DE CHEF MARCELLE MBEMBA)   */}
       {/* ==================================================================== */}
       <section
-        id="cheffe"
-        className="py-16 md:py-24 border-b border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-slate-950"
+        id="pour-qui"
+        className="py-16 md:py-20 border-b border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-slate-950"
       >
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Photo of the head physiotherapist */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-[380px] aspect-square rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md">
-                <img
-                  src={CHEFFE_PHOTO_PATH}
-                  alt="Mme. Dorlon - Cheffe du cabinet Kiné Plus"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent p-4 text-white">
-                  <div className="font-semibold text-sm">Mme. Dorlon</div>
-                  <div className="text-xs text-teal-300">Cheffe du cabinet Kiné Plus</div>
-                </div>
-              </div>
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="max-w-2xl space-y-2">
+            <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
+              Pour qui ?
             </div>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Cette prise en charge s’adresse à toutes les personnes qui souhaitent :
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Chef Marcelle Mbemba adapte chaque protocole en fonction de votre état physique et de votre rythme.
+            </p>
+          </div>
 
-            {/* Presentation of the head physiotherapist */}
-            <div className="lg:col-span-7 space-y-5">
-              <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
-                Direction des Soins & Kinésithérapie
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {TARGET_AUDIENCES.map((item, idx) => (
+              <div
+                key={item.title}
+                className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-2 shadow-2xs hover:border-teal-600 transition-colors"
+              >
+                <div className="text-xs font-mono font-bold text-teal-700">0{idx + 1}</div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-                Rencontrez la cheffe du cabinet Kiné Plus
-              </h2>
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Masseur-Kinésithérapeute Diplômée d’État et directrice du cabinet Kiné Plus,{' '}
-                <strong>Mme. Dorlon</strong> met son expertise et sa bienveillance au service de
-                votre récupération physique et de votre confort au quotidien.
-              </p>
-              <div className="space-y-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Écoute active & Diagnostic précis :</strong> Analyse attentive de vos
-                    douleurs et de vos amplitudes fonctionnelles.
-                  </span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Techniques manuelles & Appareillage moderne :</strong> Mobilisations
-                    douces et travail ciblé sur le plateau technique Kiné Plus.
-                  </span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Disponibilité directe :</strong> Contactez la cheffe au{' '}
-                    <a href="tel:0685632170" className="font-semibold text-teal-700 underline">
-                      06 85 63 21 70
-                    </a>{' '}
-                    ou par e-mail à{' '}
-                    <a
-                      href="mailto:moussietoudorlon@gmail.com"
-                      className="font-semibold text-teal-700 underline"
-                    >
-                      moussietoudorlon@gmail.com
-                    </a>
-                    .
-                  </span>
-                </div>
-              </div>
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('reservation')}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold cursor-pointer shadow-xs"
-                >
-                  <Calendar className="w-4 h-4" />
-                  <span>Réserver avec la cheffe du cabinet</span>
-                </button>
-              </div>
-            </div>
+            ))}
+          </div>
+
+          <div className="text-center pt-2">
+            <span className="text-lg font-bold text-teal-800 dark:text-teal-300 italic">
+              « Bougez mieux, vivez mieux ! »
+            </span>
           </div>
         </div>
       </section>
 
       {/* ==================================================================== */}
-      {/* 5. SERVICES DU CABINET                                               */}
+      {/* 5. SERVICES / PRESTATIONS EN PROMOTION (5 500 FCFA)                  */}
       {/* ==================================================================== */}
       <section
         id="prestations"
@@ -567,23 +685,22 @@ export function App() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="max-w-2xl space-y-2">
               <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
-                Nos Soins Kinésithérapiques
+                Nos Consultations & Soins
               </div>
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-                Prestations & Soins assurés par Kiné Plus
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Prestations assurées par Chef Marcelle Mbemba
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                Chaque séance est adaptée à votre prescription médicale et réalisée avec des
-                équipements de qualité.
+                Bénéficiez du tarif promotionnel à <strong>5 500 FCFA</strong> sur les consultations au cabinet.
               </p>
             </div>
 
             <button
               type="button"
-              onClick={() => scrollToSection('pre-evaluation')}
-              className="text-xs font-semibold text-teal-700 dark:text-teal-400 hover:underline cursor-pointer"
+              onClick={() => scrollToSection('reservation')}
+              className="text-xs font-bold text-teal-700 dark:text-teal-400 hover:underline cursor-pointer"
             >
-              Faire une pré-évaluation d’orientation →
+              Voir les créneaux disponibles →
             </button>
           </div>
 
@@ -591,13 +708,13 @@ export function App() {
             {activeServices.map((service) => (
               <article
                 key={service.id}
-                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-slate-950 p-6 flex flex-col justify-between gap-6"
+                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-slate-950 p-6 flex flex-col justify-between gap-6 hover:shadow-xs transition-shadow"
               >
                 <div className="space-y-3">
-                  <div className="text-xs font-mono font-semibold text-teal-700 dark:text-teal-400">
+                  <div className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400">
                     Soin {service.code}
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white leading-snug">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-snug">
                     {service.name}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -606,15 +723,17 @@ export function App() {
                 </div>
 
                 <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-                  <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>Durée : {service.durationLabel}</span>
-                    <span className="font-semibold text-teal-700 dark:text-teal-400">{service.price}</span>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-500">Durée : {service.durationLabel}</span>
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">
+                      {service.price}
+                    </span>
                   </div>
 
                   <button
                     type="button"
                     onClick={() => handleSelectServiceAndBook(service.id)}
-                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-teal-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-teal-700 text-white text-xs font-bold transition-colors cursor-pointer"
                   >
                     <span>Réserver ce soin</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -627,7 +746,7 @@ export function App() {
       </section>
 
       {/* ==================================================================== */}
-      {/* 6. EXPÉRIENCE PATIENT (« VOTRE PARCOURS »)                           */}
+      {/* 6. EXPÉRIENCE PATIENT : « VOTRE PARCOURS »                           */}
       {/* ==================================================================== */}
       <section
         id="parcours"
@@ -636,13 +755,13 @@ export function App() {
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="max-w-2xl space-y-2">
             <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
-              Expérience Patient
+              Votre Parcours
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-              Votre parcours au cabinet Kiné Plus
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Votre parcours avec Chef Marcelle Mbemba
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300">
-              De votre prise de rendez-vous jusqu’au rétablissement complet de votre mobilité.
+              Prenez rendez-vous et commencez votre parcours vers une meilleure mobilité.
             </p>
           </div>
 
@@ -678,6 +797,13 @@ export function App() {
         onClearPreEvaluation={() => setPreEvaluationResult(null)}
         onAppointmentCreated={handleAppointmentCreated}
         onOpenLegalModal={() => setIsLegalModalOpen(true)}
+        currentUser={loggedInUser}
+        onOpenAuthModal={(role) => {
+          setAuthDefaultRole(role || 'patient');
+          setIsAuthModalOpen(true);
+        }}
+        onUserAuthenticated={handleAuthSuccess}
+        onLogoutUser={handleLogout}
       />
 
       {/* ==================================================================== */}
@@ -687,10 +813,10 @@ export function App() {
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="space-y-2">
             <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
-              Galerie & Ambiance
+              Galerie & Cabinet
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white">
-              Découvrez le cabinet Kiné Plus en images
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+              Chef Marcelle Mbemba & Le Cabinet Kiné Plus
             </h2>
           </div>
 
@@ -709,7 +835,7 @@ export function App() {
                   />
                 </div>
                 <div className="p-5 space-y-1">
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                     {item.title}
                   </h3>
                   <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -722,8 +848,8 @@ export function App() {
 
           {/* Testimonials */}
           <div className="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-4">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-              Témoignages de nos patients vérifiés
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              Témoignages de nos patients
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {clinicData.testimonials.map((t) => (
@@ -753,12 +879,12 @@ export function App() {
             <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
               Questions Fréquentes
             </div>
-            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white">
-              Tout savoir avant votre visite chez Kiné Plus
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+              Tout savoir avant votre séance avec Chef Marcelle Mbemba
             </h2>
           </div>
 
-          <div className="divide-y divide-slate-200 dark:divide-slate-800 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xs">
+          <div className="divide-y divide-slate-200 dark:border-slate-800 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-xs">
             {FAQ_ITEMS.map((item, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
@@ -802,63 +928,63 @@ export function App() {
                 <div className="text-xs font-bold text-teal-700 dark:text-teal-400 uppercase tracking-wide">
                   Coordonnées directes
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white">
-                  Contacter le cabinet Kiné Plus
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+                  Contacter Chef Marcelle Mbemba
                 </h2>
               </div>
 
               <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-slate-950 space-y-4 text-xs">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
+                  <Phone className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-semibold text-slate-900 dark:text-white">Adresse du cabinet</div>
-                    <div className="text-slate-600 dark:text-slate-400 mt-0.5">
-                      {clinicData.settings.address} · {clinicData.settings.cityPostal}
-                    </div>
+                    <div className="font-bold text-slate-900 dark:text-white">Rendez-vous téléphonique</div>
+                    <a href="tel:068563217" className="text-teal-700 font-bold text-sm hover:underline mt-0.5 block">
+                      06 85 63 21 7
+                    </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
+                  <Mail className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-semibold text-slate-900 dark:text-white">Horaires d’ouverture</div>
+                    <div className="font-bold text-slate-900 dark:text-white">E-mail direct</div>
+                    <a
+                      href="mailto:mbembamarcelle6@gmail.com"
+                      className="text-teal-700 underline mt-0.5 block"
+                    >
+                      mbembamarcelle6@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Clock className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-bold text-slate-900 dark:text-white">Horaires d’ouverture</div>
                     <div className="text-slate-600 dark:text-slate-400 mt-0.5">
                       {clinicData.settings.openingHoursSummary}
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-semibold text-slate-900 dark:text-white">E-mail direct</div>
-                    <a
-                      href="mailto:moussietoudorlon@gmail.com"
-                      className="text-teal-700 dark:text-teal-400 underline mt-0.5 block"
-                    >
-                      moussietoudorlon@gmail.com
-                    </a>
-                  </div>
-                </div>
-
                 {/* Direct 1-click calls */}
                 <div className="flex flex-wrap items-center gap-3 pt-3">
                   <a
-                    href="tel:0685632170"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors shadow-xs"
+                    href="tel:068563217"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors shadow-xs"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Appeler le 06 85 63 21 70</span>
+                    <span>Appeler le 06 85 63 21 7</span>
                   </a>
 
                   <a
-                    href="https://wa.me/33685632170"
+                    href="https://wa.me/242068563217"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold transition-colors shadow-xs"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-colors shadow-xs"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
-                    <span>WhatsApp au 06 85 63 21 70</span>
+                    <span>WhatsApp au 06 85 63 21 7</span>
                   </a>
                 </div>
               </div>
@@ -877,7 +1003,7 @@ export function App() {
                           mapMode === m ? 'bg-white dark:bg-slate-900 shadow-xs' : 'text-slate-600'
                         }`}
                       >
-                        {m === 'plan' ? 'Plan' : m === 'itineraire' ? 'Métro/Bus' : 'PMR & Parking'}
+                        {m === 'plan' ? 'Plan' : m === 'itineraire' ? 'Transports' : 'Accès PMR'}
                       </button>
                     ))}
                   </div>
@@ -885,17 +1011,17 @@ export function App() {
                 <div className="p-6 bg-slate-100/60 dark:bg-slate-900/40 text-xs text-slate-700 dark:text-slate-300">
                   {mapMode === 'plan' && (
                     <p>
-                      <strong>Localisation :</strong> 12 Avenue des Praticiens, 75011 Paris. Cabinet en rez-de-chaussée sur cour calme.
+                      <strong>Cabinet Kiné Plus :</strong> Établissement accessible, dirigé par Chef Marcelle Mbemba. Prise en charge sur rendez-vous au <strong>06 85 63 21 7</strong>.
                     </p>
                   )}
                   {mapMode === 'itineraire' && (
                     <p>
-                      <strong>Transports en commun :</strong> Métro ligne 9 (station Voltaire ou Charonne) à 2 minutes à pied. Bus 69 et 56.
+                      <strong>Transports :</strong> Accessible par les grands axes et stations de transport en commun. Taxis et véhicules disponibles.
                     </p>
                   )}
                   {mapMode === 'acces' && (
                     <p>
-                      <strong>Accessibilité & Stationnement :</strong> Accès de plain-pied accessible aux personnes à mobilité réduite (PMR). Places de stationnement à proximité immédiate.
+                      <strong>Accessibilité :</strong> Accès de plain-pied aménagé pour les personnes à mobilité réduite (PMR) et patients en rééducation.
                     </p>
                   )}
                 </div>
@@ -909,11 +1035,11 @@ export function App() {
                 className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-slate-950 p-6 sm:p-8 space-y-4"
               >
                 <div className="space-y-1">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                    Envoyer un message à la cheffe du cabinet
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Envoyer un message à Chef Marcelle Mbemba
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Réponse sous 24h par Mme. Dorlon ou l’équipe Kiné Plus.
+                    Posez votre question ou demandez conseil à la cheffe du cabinet.
                   </p>
                 </div>
 
@@ -935,7 +1061,7 @@ export function App() {
                       type="tel"
                       value={contactPhone}
                       onChange={(e) => setContactPhone(e.target.value)}
-                      placeholder="06 12 34 56 78"
+                      placeholder="06 85 63 21 7"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
                     />
                   </div>
@@ -949,7 +1075,7 @@ export function App() {
                       required
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
-                      placeholder="votre.email@exemple.fr"
+                      placeholder="votre.email@exemple.com"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
                     />
                   </div>
@@ -959,7 +1085,7 @@ export function App() {
                       type="text"
                       value={contactSubject}
                       onChange={(e) => setContactSubject(e.target.value)}
-                      placeholder="Demande d’information..."
+                      placeholder="Renseignement, mal de dos..."
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
                     />
                   </div>
@@ -972,7 +1098,7 @@ export function App() {
                     required
                     value={contactMessage}
                     onChange={(e) => setContactMessage(e.target.value)}
-                    placeholder="Posez votre question ou détaillez votre demande..."
+                    placeholder="Détaillez vos douleurs ou votre demande..."
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
                   />
                 </div>
@@ -991,7 +1117,7 @@ export function App() {
 
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold cursor-pointer shadow-xs"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold cursor-pointer shadow-xs"
                 >
                   <Send className="w-3.5 h-3.5" />
                   <span>Envoyer mon message</span>
@@ -1008,13 +1134,14 @@ export function App() {
       <footer className="py-12 bg-[#F8FAFC] dark:bg-slate-950 text-xs text-slate-500">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>
-            <span className="font-bold text-slate-900 dark:text-white">Kiné Plus</span> · Cabinet de Kinésithérapie · Tél :{' '}
-            <a href="tel:0685632170" className="underline font-medium text-slate-700 dark:text-slate-300">
-              06 85 63 21 70
+            <span className="font-bold text-slate-900 dark:text-white">Kiné Plus</span> · Dirigé par{' '}
+            <strong>Chef Marcelle Mbemba</strong> · RDV :{' '}
+            <a href="tel:068563217" className="underline font-bold text-slate-800 dark:text-slate-200">
+              06 85 63 21 7
             </a>{' '}
             · E-mail :{' '}
-            <a href="mailto:moussietoudorlon@gmail.com" className="underline font-medium text-slate-700 dark:text-slate-300">
-              moussietoudorlon@gmail.com
+            <a href="mailto:mbembamarcelle6@gmail.com" className="underline font-bold text-slate-800 dark:text-slate-200">
+              mbembamarcelle6@gmail.com
             </a>
           </div>
 
@@ -1029,10 +1156,13 @@ export function App() {
             <span>·</span>
             <button
               type="button"
-              onClick={() => setIsAdminView(true)}
-              className="underline cursor-pointer"
+              onClick={() => {
+                setAuthDefaultRole('admin');
+                setIsAuthModalOpen(true);
+              }}
+              className="underline cursor-pointer font-semibold text-teal-700"
             >
-              Espace Praticien
+              Espace Praticien (Google / Apple / Mail)
             </button>
           </div>
         </div>
@@ -1043,12 +1173,20 @@ export function App() {
         <button
           type="button"
           onClick={() => scrollToSection('reservation')}
-          className="w-full h-12 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-sm font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full h-12 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-sm font-bold shadow-md flex items-center justify-center gap-2 cursor-pointer"
         >
           <Calendar className="w-4 h-4" />
-          <span>Prendre rendez-vous · Kiné Plus</span>
+          <span>Prendre rendez-vous · 5 500 FCFA</span>
         </button>
       </div>
+
+      {/* Multi-provider Auth Modal (Google, Apple, Mail) */}
+      <MultiAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+        defaultRole={authDefaultRole}
+      />
 
       <LegalPrivacyModal
         isOpen={isLegalModalOpen}
@@ -1060,3 +1198,4 @@ export function App() {
 }
 
 export default App;
+

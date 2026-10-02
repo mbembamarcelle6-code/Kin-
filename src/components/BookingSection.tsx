@@ -12,10 +12,12 @@ import {
   Phone,
   Printer,
   ShieldCheck,
+  Sparkles,
   UserCheck,
 } from 'lucide-react';
 import {
   Appointment,
+  AuthUser,
   ClinicDatabase,
   PreEvaluationResult,
 } from '../types/clinic';
@@ -35,6 +37,10 @@ interface BookingSectionProps {
   onClearPreEvaluation: () => void;
   onAppointmentCreated: (apt: Appointment) => void;
   onOpenLegalModal: () => void;
+  currentUser?: AuthUser | null;
+  onOpenAuthModal?: (role?: 'admin' | 'patient') => void;
+  onUserAuthenticated?: (user: AuthUser) => void;
+  onLogoutUser?: () => void;
 }
 
 export const BookingSection: React.FC<BookingSectionProps> = ({
@@ -45,6 +51,10 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
   onClearPreEvaluation,
   onAppointmentCreated,
   onOpenLegalModal,
+  currentUser,
+  onOpenAuthModal,
+  onUserAuthenticated,
+  onLogoutUser,
 }) => {
   const activeServices = useMemo(
     () => clinicData.services.filter((s) => s.active),
@@ -79,6 +89,24 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
       }
     }
   }, [preEvaluation, onSelectServiceId]);
+
+  // Auto-fill from currentUser (Google, Apple, Email)
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.email && !email) {
+        setEmail(currentUser.email);
+      }
+      if (currentUser.name && currentUser.name !== 'Patient Kiné Plus') {
+        const parts = currentUser.name.trim().split(' ');
+        if (parts.length > 1) {
+          if (!firstName) setFirstName(parts[0]);
+          if (!lastName) setLastName(parts.slice(1).join(' '));
+        } else if (parts.length === 1) {
+          if (!firstName) setFirstName(parts[0]);
+        }
+      }
+    }
+  }, [currentUser]);
 
   const upcomingDates = useMemo(() => {
     const list: string[] = [];
@@ -664,6 +692,123 @@ export const BookingSection: React.FC<BookingSectionProps> = ({
                   Étape 3 / 3
                 </span>
               </div>
+
+              {/* Fast Authentication: Google / Apple / E-mail */}
+              {currentUser ? (
+                <div className="p-3.5 rounded-xl border border-teal-200 dark:border-teal-800 bg-teal-50/70 dark:bg-teal-950/40 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-teal-700 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'P'}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold text-teal-900 dark:text-teal-200 truncate">
+                        Connecté via {currentUser.provider === 'google' ? 'Google' : currentUser.provider === 'apple' ? 'Apple ID' : 'E-mail'} ({currentUser.name})
+                      </div>
+                      <div className="text-[11px] text-teal-700 dark:text-teal-400 truncate">
+                        {currentUser.email} · Coordonnées appliquées automatiquement
+                      </div>
+                    </div>
+                  </div>
+                  {onLogoutUser && (
+                    <button
+                      type="button"
+                      onClick={onLogoutUser}
+                      className="text-xs text-slate-500 hover:text-rose-600 underline cursor-pointer shrink-0"
+                    >
+                      Changer
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+                  <div>
+                    <div className="text-xs font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-teal-600" />
+                      <span>Authentification & Pré-remplissage en 1 clic</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Identifiez-vous pour remplir automatiquement votre nom, prénom et e-mail :
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const res = await fetch('/api/auth/google', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: email || 'patient@gmail.com', name: lastName ? `${firstName} ${lastName}` : 'Patient Kiné Plus' }),
+                          });
+                          const data = await res.json();
+                          if (data?.user) {
+                            onUserAuthenticated?.(data.user);
+                            if (!email && data.user.email) setEmail(data.user.email);
+                          }
+                        } catch {
+                          onOpenAuthModal?.('patient');
+                        }
+                      }}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer shadow-2xs transition-colors"
+                    >
+                      <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24">
+                        <path
+                          fill="#4285F4"
+                          d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.87c2.26-2.09 3.675-5.17 3.675-9.15z"
+                        />
+                        <path
+                          fill="#34A853"
+                          d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.87-3.05c-1.08.72-2.45 1.16-4.06 1.16-3.13 0-5.78-2.11-6.73-4.96H1.25v3.15C3.25 21.36 7.33 24 12 24z"
+                        />
+                        <path
+                          fill="#FBBC05"
+                          d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.61H1.25C.45 8.22 0 10.06 0 12s.45 3.78 1.25 5.39l4.02-3.15z"
+                        />
+                        <path
+                          fill="#EA4335"
+                          d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.25 2.64 1.25 6.61l4.02 3.15c.95-2.85 3.6-4.96 6.73-4.96z"
+                        />
+                      </svg>
+                      <span>Google</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const res = await fetch('/api/auth/apple', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: email || 'patient@icloud.com' }),
+                          });
+                          const data = await res.json();
+                          if (data?.user) {
+                            onUserAuthenticated?.(data.user);
+                            if (!email && data.user.email) setEmail(data.user.email);
+                          }
+                        } catch {
+                          onOpenAuthModal?.('patient');
+                        }
+                      }}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black text-white text-xs font-medium hover:bg-neutral-800 cursor-pointer shadow-2xs transition-colors"
+                    >
+                      <svg className="w-3.5 h-3.5 shrink-0 fill-current" viewBox="0 0 24 24">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-2 0.6-2.65 1.35-.58.66-1.09 1.73-.95 2.76.99.08 2.05-.51 2.68-1.26z" />
+                      </svg>
+                      <span>Apple</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onOpenAuthModal?.('patient')}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-medium hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-teal-700" />
+                      <span>E-mail</span>
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
